@@ -1,0 +1,23 @@
+{%extends "base.html" %}
+{%block content%}
+<div class="main">
+    <h1>Welcome to ChatApplication {{ username }}</h1>
+    <h3>Enter a code to join</h3>
+    <form method="post" action="">
+          <div class="form-group">
+            {{ form.csrf_token }}
+
+            {{ form.code.label}}
+            {{ form.code(class="form-control form-control-lg",placeholder="code") }}
+
+          </div>
+          <div class="d-flex bd-highlight">
+            {{form.submit(class="form-control form-control-lg  green-button" )}}
+                     
+       </div>
+          
+    </form>
+
+
+</div>
+{% endblock %}

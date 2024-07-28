@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 >Welcome</h1>
+<nav></nav>
+<div id="main-section">
+    <!-- Room selection -->
+    <!-- Message Area -->
+    <div class="card">
+        <div class="chat-header">Chat</div>
+          <div class="chat-window">
+            <div class="display-message-section" style="color: rgb(6, 20, 20);"></div>
+        </div>
+          <div class="chat-input">
+              <input type="text" id="user_message" placeholder="Type a message..." autocomplete="off">
+            <button type="button" id="send_message">Send</button>
+            <button type="button" id="leave">Leave</button>
+          </div>
+        </div>
+        <!-- Display Area -->
+       
+
+
+<!-- JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+    const socket = io();
+
+    // Retrieve username from template
+    const username = "{{ username }}";
+
+    // Handle joining a room
+    socket.on('connect', () => {
+        const room = "{{ code }}";
+    });
+
+    // Handle receiving a message
+    socket.on('message', (data) => {
+        const date = new Date().toLocaleString();
+        $('.display-message-section').append(`<p><strong>${data.username}</strong>: ${data.message} (${date})</p>`);
+    });
+
+    // Handle user joining a room
+    socket.on('join', (data) => {
+        $('.display-message-section').append(`<p><em>${data.name} ${data.message}</em></p>`);
+    });
+
+    // Handle user leaving a room
+    socket.on('leave', (data) => {
+        $('.display-message-section').append(`<p><em>${data.name} ${data.message}</em></p>`);
+    });
+
+
+
+    function send_message(){
+        const message = $('#user_message').val().trim();
+        if (message !== '') {
+            socket.send({ message: message, username: username });
+            $('#user_message').val(''); // Clear input field
+        } else {
+            alert('Please enter a message');
+        }
+
+    }
+
+    // Send message to server when Send button is clicked
+    $('#send_message').click((event)=>{
+        send_message();
+
+    });
+
+    $('#user_message').keypress((event) => {
+        if (event.which === 13) { 
+            send_message();
+        }
+    });
+    
+
+    // Handle leaving the room
+    $('#leave').click(() => {
+        socket.emit('leave');
+
+        console.log(`${username} left the room`);
+        });
+
+    socket.on('redirect', function(data) {
+        window.location.href = data.url;
+    });
+</script>
+{% endblock content %}

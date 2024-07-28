@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="main">
+    <h1>Welcome to ChatApplication</h1>
+    <h3>Please Signup</h3>
+
+    <form method="post" action="">
+        {{ form.csrf_token }}
+
+        <div class="form-group">
+            {{ form.username.label }}
+            {{ form.username(class="form-control form-control-lg", placeholder="Username") }}
+            {% if form.username.errors %}
+
+
+            <div class="text-danger">
+                {% for error in form.username.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form.password.label }}
+            {{ form.password(class="form-control form-control-lg", placeholder="Password") }}
+            {% if form.password.errors %}
+            <div class="invalid-feedback">
+                {% for error in form.password.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form.confirm_password.label }}
+            {{ form.confirm_password(class="form-control form-control-lg", placeholder="Confirm Password") }}
+            {% if form.confirm_password.errors %}
+            <div class="text-danger">
+                {% for error in form.confirm_password.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form.submit(class="form-control form-control-lg green-button") }}
+        </div>
+        <div class="d-flex bd-highlight">
+            <small class="text-muted">
+                Aleady have an account? <a class="ml-2" href="{{ url_for('main.login') }}">login Now</a>
+            </small>
+        </div>
+
+        {{ form.csrf_token }}
+    </form>
+</div>
+{% endblock content %}
